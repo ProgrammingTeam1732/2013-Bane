@@ -2,6 +2,7 @@ package org.usfirst.frc.team1732.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -14,6 +15,14 @@ public class Robot extends IterativeRobot {
 	Talon shooter1 = new Talon(8);
 	Talon shooter2 = new Talon(9);
 	
+	Solenoid lift = new Solenoid(0);
+	Solenoid shoot = new Solenoid(1);
+	Solenoid shift = new Solenoid(2);
+
+	boolean prev = false;
+	boolean toggle = false;
+	
+	boolean doLift = false;
 	boolean doReverse = false;
 	int reverse = 1;
 	double flyWheelSpeed = 1;
@@ -30,8 +39,17 @@ public class Robot extends IterativeRobot {
         reverse = doReverse ? -1 : 1;
         if(controller.getRawButton(8))setFlyWheels(reverse*flyWheelSpeed);
         else setFlyWheels(0);
+        boolean button = controller.getRawButton(12);
+        if(button && !prev) {
+        	toggle = !toggle;
+        }
+        lift.set(toggle);
+        prev = button;
+        
+        shoot.set(controller.getRawButton(9));
+        shift.set(controller.getRawButton(10));
     }
-    
+   
     private void setFlyWheels(double a) {
     	shooter1.set(a);
     	shooter2.set(a);
