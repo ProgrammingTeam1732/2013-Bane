@@ -14,7 +14,7 @@ public class Robot extends IterativeRobot {
 	Talon right = new Talon(5);
 	Talon shooter1 = new Talon(8);
 	Talon shooter2 = new Talon(9);
-	
+
 	Solenoid lift = new Solenoid(0);
 	Solenoid shoot = new Solenoid(1);
 	Solenoid shift = new Solenoid(2);
@@ -33,21 +33,21 @@ public class Robot extends IterativeRobot {
     }
     
     public void teleopPeriodic() {
-        setMotors(controller.getRawAxis(1),controller.getRawAxis(3));
+        setMotors(controller.getRawAxis(1),controller.getRawAxis(5));
         doReverse = SmartDashboard.getBoolean("Reverse the flywheels?");
         flyWheelSpeed = SmartDashboard.getNumber("Flywheel speed:");
         reverse = doReverse ? -1 : 1;
-        if(controller.getRawButton(8))setFlyWheels(reverse*flyWheelSpeed);
+        if(controller.getRawButton(6))setFlyWheels(reverse*flyWheelSpeed);
         else setFlyWheels(0);
-        boolean button = controller.getRawButton(12);
+        boolean button = (controller.getRawAxis(3) > 0 ? true : false);
         if(button && !prev) {
         	toggle = !toggle;
         }
         lift.set(toggle);
         prev = button;
         
-        shoot.set(controller.getRawButton(9));
-        shift.set(controller.getRawButton(10));
+        shoot.set(controller.getRawButton(1));
+        shift.set(controller.getRawButton(5));
     }
    
     private void setFlyWheels(double a) {
